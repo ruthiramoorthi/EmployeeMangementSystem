@@ -20,4 +20,7 @@ public class EmployeService {
     public Employee saveEmployee(Employee employee) {
         return employeeRepositary.save(employee);
     }
+    public void deleteEmployee(int id) {
+        employeeRepositary.deleteById(id);
+    }
 }
