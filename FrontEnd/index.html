@@ -1,0 +1,55 @@
+<!doctype html>
+<html>
+<head><meta charset="utf-8"/><title>Employee Form</title></head>
+<body>
+  <h1 id="title">Add Employee</h1>
+  <form id="empForm">
+    <input name="firstName" placeholder="First name" required />
+    <input name="lastName" placeholder="Last name" />
+    <input name="email" placeholder="Email" type="email" required />
+    <input name="phone" placeholder="Phone" />
+    <input name="salary" placeholder="Salary" type="number" />
+    <button type="submit">Save</button>
+  </form>
+  <script>
+  const API='http://localhost:8080/api/employees';
+  const form=document.getElementById('empForm');
+  const params = new URLSearchParams(location.search);
+  const id = params.get('id');
+
+  if(id){
+    document.getElementById('title').textContent='Edit Employee';
+    fetch(`${API}/${id}`).then(r=>r.json()).then(e=>{
+      form.firstName.value=e.firstName;
+      form.lastName.value=e.lastName || '';
+      form.email.value=e.email;
+      form.phone.value=e.phone || '';
+      form.salary.value=e.salary || '';
+    });
+  }
+
+  form.addEventListener('submit', async (ev)=>{
+    ev.preventDefault();
+    const body = {
+      firstName: form.firstName.value,
+      lastName: form.lastName.value,
+      email: form.email.value,
+      phone: form.phone.value,
+      salary: parseFloat(form.salary.value) || null
+    };
+    const method = id ? 'PUT' : 'POST';
+    const url = id ? `${API}/${id}` : API;
+    const res = await fetch(url, {
+      method,
+      headers: {'Content-Type':'application/json'},
+      body: JSON.stringify(body)
+    });
+    if(res.ok) location.href='index.html';
+    else {
+      const err = await res.json();
+      alert('Error: ' + JSON.stringify(err));
+    }
+  });
+  </script>
+</body>
+</html>
