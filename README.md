@@ -38,7 +38,3 @@ Spring Data JPA
 MySQL Database
 
 Hibernate
-
-or
-
-HTML, CSS, JavaScript
